@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../dist/spat.min.js"></script>
+    <title>Spat Example</title>
+</head>
+<body>
+    <h1 id="title">Placeholder</h1>
+    <p id="content">Placeholder</p>
+    <p id="not-mapped">This element id is not mapped</p>
+    <p id="english-only">Placeholder</p>
+    <p id="spanish-only">Placeholder</p>
+    <div id="with-children">
+        <p>The content should not be affected</p>
+    </div>
+    <!-- this should not show -->
+    <p id="empty"></p>
+    <!-- this should show -->
+    <p id="empty-with-spaces">
+    </p>
+    <button onclick="Spat.setLanguage('es')">Spanish</button>
+    <br>
+    <br>
+    <button onclick="Spat.setLanguage('en')">English</button>
+    <br>
+    <br>
+    <button onclick="Spat.setLanguage('jp')">Japananese (File not present)</button>
+</body>
+</html>

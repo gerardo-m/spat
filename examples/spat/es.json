@@ -1,0 +1,8 @@
+{
+    "title": "Esto es un título",
+    "content": "Y esto es contenido",
+    "spanish-only": "Esto solo está mapeado en español",
+    "with-children": "Este div tiene elementos hijos",
+    "empty": "Esto no deberia mostrarse",
+    "empty-with-spaces": "Esto se muestra porque el elemento no está completamente vacío"
+}

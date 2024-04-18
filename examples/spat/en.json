@@ -1,0 +1,8 @@
+{
+    "title": "This is a title",
+    "content": "And this is content",
+    "english-only": "This is only mapped in english",
+    "with-children": "This div has child elements",
+    "empty": "This should not show",
+    "empty-with-spaces": "This is showing because the element is not entirely empty"
+}
