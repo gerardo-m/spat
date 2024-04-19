@@ -1,34 +1,44 @@
+
+/**
+ * @name spat
+ * @version 0.1.0
+ * @author Gerardo Miranda - https://github.com/gerardo-m
+ * @license MIT
+ * 
+ * A simple "Static PAge Translator" with no dependencies
+ */
 class Spat{
 
-    static _translations;
-    static _defaultLanguage = 'en';
-    static _language;
+    _translations;
+    _defaultLanguage = 'en';
+    _language;
+    _languageDir = 'spat';
 
-    static _defineLanguage(){
-        if (Spat._language == undefined) Spat._language = localStorage.getItem('language');
-        if (Spat._language == null) Spat._language = document.documentElement.lang;
-        if (Spat._language.trim().length == 0)  Spat._language = Spat._defaultLanguage;
+    _defineLanguage(){
+        if (this._language == undefined) this._language = localStorage.getItem('language');
+        if (this._language == null) this._language = document.documentElement.lang;
+        if (this._language.trim().length == 0)  this._language = this._defaultLanguage;
     }
 
-    static async _fetchLanguage(){
-        Spat._defineLanguage();
-        const url = 'spat/' +  Spat._language + '.json';
+    async _fetchLanguage(){
+        this._defineLanguage();
+        const url = this._languageDir + '/' +  this._language + '.json';
         const response = await fetch(url);
         if (response.status != 200){
-            console.warn(`Language file not provided: ${Spat._language}`);
-            Spat._language = undefined;
-            Spat._defineLanguage();
+            console.warn(`Language file not provided: ${this._language}`);
+            this._language = undefined;
+            this._defineLanguage();
             return;
         } 
-        localStorage.setItem('language', Spat._language);
-        Spat._translations = await response.json();
+        localStorage.setItem('language', this._language);
+        this._translations = await response.json();
     }
 
-    static async _replaceStrings(){
-        await Spat._fetchLanguage();
-        const values = Object.values(Spat._translations);
+    async _replaceStrings(){
+        await this._fetchLanguage();
+        const values = Object.values(this._translations);
         var valueIndex = 0;
-        Object.keys(Spat._translations).forEach(function(key) {
+        Object.keys(this._translations).forEach(function(key) {
             var element = document.getElementById(key);
             if (element == null){
                 valueIndex++;return;
@@ -45,10 +55,18 @@ class Spat{
         });
     }
 
-    static setLanguage(lang) {
-        if (lang == Spat._language) return;
-        Spat._language = lang;
-        Spat._replaceStrings();
+    setLanguage(lang) {
+        if (lang == this._language) return;
+        this._language = lang;
+        this._replaceStrings();
+    }
+
+    setDefaultLanguage(lang){
+        this._defaultLanguage = lang;
+    }
+
+    setLanguageDirectory(dir){
+        this._languageDir = dir;
     }
 
 }
@@ -61,6 +79,8 @@ function ready(callback){
     });
 }
 
+const spat = new Spat();
+
 ready(function(){
-    Spat._replaceStrings();
+    spat._replaceStrings();
 })
