@@ -4,5 +4,19 @@
     "english-only": "This is only mapped in english",
     "with-children": "This div has child elements",
     "empty": "This should not show",
-    "empty-with-spaces": "This is showing because the element is not entirely empty"
+    "empty-with-spaces": "This is showing because the element is not entirely empty",
+    "rich-text": [
+        {
+            "value": "Normal text "
+        },
+        {
+            "tag": "b",
+            "value": "Bold text "
+        },
+        {
+            "tag": "a",
+            "value": "Link",
+            "href": "https://www.google.com"
+        }
+    ]
 }

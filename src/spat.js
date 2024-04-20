@@ -1,7 +1,7 @@
 
 /**
  * @name spat
- * @version 0.1.0
+ * @version 0.2.0
  * @author Gerardo Miranda - https://github.com/gerardo-m
  * @license MIT
  * 
@@ -37,22 +37,59 @@ class Spat{
     async _replaceStrings(){
         await this._fetchLanguage();
         const values = Object.values(this._translations);
-        var valueIndex = 0;
-        Object.keys(this._translations).forEach(function(key) {
-            var element = document.getElementById(key);
-            if (element == null){
-                valueIndex++;return;
-            }
+        const keys = Object.keys(this._translations);
+        for (let valueIndex = 0; valueIndex < keys.length; valueIndex++) {
+            const element = document.getElementById(keys[valueIndex]);
+            if (element == null) continue;
+            this._processElement(element, values[valueIndex]);
+        }
+    }
+
+    _processElement(element, value){
+        if ((typeof value) == "string"){
             var ch = element.childNodes;
             for (let i = 0; i < ch.length; i++) {
                 const node = ch[i];
                 if (node.nodeType === 3){ // 3 = TEXT_NODE
-                    node.nodeValue = values[valueIndex];
+                    node.nodeValue = value;
                     break;
                 }
             }
-            valueIndex++;
-        });
+            return;
+        }
+        if (Array.isArray(value)){
+            element.replaceChildren(...this._createNodesFromArray(value));
+        }
+    }
+
+    _createNodesFromArray(array){
+        console.log("creating nodes");
+        var nodes = [];
+        for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            const tag = element["tag"];
+            if (tag == undefined){
+                const value = element["value"] || '';
+                console.log(value);
+                nodes.push(document.createTextNode(value));
+                continue;
+            }
+            const node = document.createElement(tag);
+            const value = element["value"];
+            node.append(value);
+            this._createAttributesForNode(node, element);
+            nodes.push(node);
+        }
+        return nodes;
+    }
+
+    _createAttributesForNode(node, jsonElement){
+        const keys = Object.keys(jsonElement);
+        for (let index = 0; index < keys.length; index++) {
+            if (keys[index] == "tag" || keys[index] == "value") continue;
+            const value = jsonElement[keys[index]];
+            node.setAttribute(keys[index], value);
+        }
     }
 
     setLanguage(lang) {

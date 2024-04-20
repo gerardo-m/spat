@@ -1,11 +1,14 @@
 <p align="center">
     <h1 align="center">Spat</h1>
     <p align="center">
-      <a href="https://raw.githubusercontent.com/EOussama/translatorjs/master/dist/translator.min.js">
-        <img align="center" src="https://img.shields.io/github/size/gerardo-m/spat/dist/spat.min.js" alt="Spat' size.">
+      <a href="https://raw.githubusercontent.com/gerardo-m/spat/master/dist/spat.min.js">
+        <img align="center" src="https://img.shields.io/github/size/gerardo-m/spat/dist/spat.min.js" alt="Spat size.">
       </a>
-      <a href="https://raw.githubusercontent.com/EOussama/translatorjs/master/LICENSE">
-        <img align="center" src="https://img.shields.io/github/license/EOussama/translatorjs.svg" alt="TranslatorJS' license.">
+      <a href="https://raw.githubusercontent.com/gerardo-m/spat/master/LICENSE">
+        <img align="center" src="https://img.shields.io/github/license/gerardo-m/spat" alt="Spat license.">
+      </a>
+      <a href="https://raw.githubusercontent.com/gerardo-m/spat/master/dist/spat.min.js">
+        <img align="center" src="https://img.shields.io/jsdelivr/gh/hy/gerardo-m/spat" alt="Spat hits.">
       </a>
     </p>
 </p>
@@ -76,11 +79,21 @@ By default Spat will look for a directory called 'spat' for the json files, you 
 
 ## How Spat works
 
-Spat works by a simple mechanism, taking a json file where the keys represent the ids of the html elements and the value is the translation. For every key it will search for the element with that id and replace its text content with the translation.
+Spat works by a simple mechanism, taking a json file where the keys represent the ids of the html elements and the value is the translation. For every key it will search for the element with that id and replace its content with the translation.
 
-It will not replace the entire content of the element, just the first Text Node it encounters. This means it will not affect nested elements e.g:
+How it replaces the content of the element will depend on the value provided by the json file:
+
+### Simple text
+
+```json
+{
+  "content": "this is content"
+}
+```
+
+If the language file contains only a string spat will not replace the entire content of the element, just the first Text Node it encounters. This means it will not affect nested elements e.g:
 ```html
-<p id="p1">This text will be translated <b>This text will not</b> And neither this one</p>
+<p id="content">This text will be translated <b>This text will not</b> And neither this one</p>
 ```
 Since it is replacing the first text node it will not replace an empty text
 ```html
@@ -89,12 +102,42 @@ Since it is replacing the first text node it will not replace an empty text
 <!-- this will show -->
 <p id="p2"> </p>
 <!-- this will show as well -->
-<p id="p2">
+<p id="p3">
 </p>
 ```
+### Rich text
+
+```json
+"rich-text": [
+  {
+    "value": "Normal text "
+  },
+  {
+    "tag": "b",
+    "value": "Bold text "
+  },
+  {
+    "tag": "a",
+    "value": "Link",
+    "href": "https://www.google.com"
+  }
+]
+```
+Spat supports rich text in the format above, the value of the id we want to translate should contain an Array and every element represents a node that will be created. 
+
+For every element if the `tag` attribute is present it will create an HTML element with that tag name and a single child with the value of the `value` attribute. Any other attribute that is contained in the element will be parsed as an Attribute for the HTML element.
+
+If the `tag` attribute is not present, it will create a text node with the value of the `value` attribute.
+
+The json snippet from above will generate the following content for the target element:
+```html
+Normal text 
+<b>Bold text </b>
+<a href="https://www.google.com">Link</a>
+```
+***WARNING:** When using this functionality Spat WILL REPLACE the entire content of the target element
 
 ## ROADMAP
 
-- Add support to generate nested elements
 - Add some tooling to generate the language files
-- Improve this README lol
+- Continue improving this README

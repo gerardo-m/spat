@@ -4,5 +4,19 @@
     "spanish-only": "Esto solo está mapeado en español",
     "with-children": "Este div tiene elementos hijos",
     "empty": "Esto no deberia mostrarse",
-    "empty-with-spaces": "Esto se muestra porque el elemento no está completamente vacío"
+    "empty-with-spaces": "Esto se muestra porque el elemento no está completamente vacío",
+    "experiment": [
+        {
+            "value": "Texto normal "
+        },
+        {
+            "tag": "b",
+            "value": "Texto en negrita "
+        },
+        {
+            "tag": "a",
+            "value": "Link",
+            "href": "https://www.google.com"
+        }
+    ]
 }
